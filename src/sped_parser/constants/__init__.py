@@ -7,11 +7,13 @@ This package contains all constant values used in SPED file parsing:
 - UF codes and state names
 - Record layouts with column positions
 - Parent register codes for hierarchy
+- Operation indicators and document status codes
 """
 
 from .cst import CST_PIS_COFINS, CST_ICMS
 from .cfop import CFOP_DESCRIPTIONS
 from .uf import UF_CODES
+from .indicators import IND_OPER, COD_SIT, NAT_BC_CRED
 from .layouts import (
     ENCODING,
     DELIMITER,
@@ -35,6 +37,10 @@ __all__ = [
     "CFOP_DESCRIPTIONS",
     # UF codes
     "UF_CODES",
+    # Indicators
+    "IND_OPER",
+    "COD_SIT",
+    "NAT_BC_CRED",
     # Parsing constants
     "ENCODING",
     "DELIMITER",

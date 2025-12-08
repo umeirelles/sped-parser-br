@@ -134,7 +134,7 @@ class EFDFiscalParser(SPEDParser):
         self, df: pd.DataFrame, products: pd.DataFrame, participants: pd.DataFrame
     ) -> list[SPEDItem]:
         """Extract C170 purchase items (entradas only)."""
-        # Get C100 invoice headers for ind_oper and cod_part lookup
+        # Get C100 invoice headers for ind_oper, cod_part, and document info
         c100 = df[df["0"] == "C100"].copy()
         if c100.empty:
             return []
@@ -142,7 +142,10 @@ class EFDFiscalParser(SPEDParser):
         c100_layout = EFDFiscalLayout.RECORD_C100
         c100["IND_OPER"] = c100[str(c100_layout["IND_OPER"])]
         c100["COD_PART"] = c100[str(c100_layout["COD_PART"])]
-        c100_data = c100.set_index("id")[["IND_OPER", "COD_PART"]]
+        c100["NUM_DOC"] = c100[str(c100_layout["NUM_DOC"])]
+        c100["CHV_NFE"] = c100[str(c100_layout["CHV_NFE"])]
+        c100["DT_DOC"] = c100[str(c100_layout["DT_DOC"])]
+        c100_data = c100.set_index("id")[["IND_OPER", "COD_PART", "NUM_DOC", "CHV_NFE", "DT_DOC"]]
 
         # Get C170 items
         c170 = df[df["0"] == "C170"].copy()
@@ -154,22 +157,42 @@ class EFDFiscalParser(SPEDParser):
         # Filter for purchases (ind_oper == '0')
         c170["ind_oper"] = c170["id_pai"].map(c100_data["IND_OPER"])
         c170["cod_part"] = c170["id_pai"].map(c100_data["COD_PART"])
+        c170["num_doc"] = c170["id_pai"].map(c100_data["NUM_DOC"])
+        c170["chv_nfe"] = c170["id_pai"].map(c100_data["CHV_NFE"])
+        c170["dt_doc"] = c170["id_pai"].map(c100_data["DT_DOC"])
         c170_purchases = c170[c170["ind_oper"] == "0"].copy()
 
         if c170_purchases.empty:
             return []
 
-        # Extract fields
+        # Extract fields from C170
         c170_purchases["COD_ITEM"] = c170_purchases[str(layout["COD_ITEM"])]
         c170_purchases["CFOP"] = c170_purchases[str(layout["CFOP"])]
         c170_purchases["VL_ITEM"] = c170_purchases[str(layout["VL_ITEM"])]
+        c170_purchases["QTD"] = c170_purchases[str(layout["QTD"])]
+        c170_purchases["UNID"] = c170_purchases[str(layout["UNID"])]
+        c170_purchases["DESCR_COMPL"] = c170_purchases[str(layout["DESCR_COMPL"])]
+
+        # Tax values
         c170_purchases["VL_ICMS"] = c170_purchases[str(layout["VL_ICMS"])]
         c170_purchases["VL_PIS"] = c170_purchases[str(layout["VL_PIS"])]
         c170_purchases["VL_COFINS"] = c170_purchases[str(layout["VL_COFINS"])]
+        c170_purchases["VL_IPI"] = c170_purchases[str(layout["VL_IPI"])]
+
+        # Tax rates
+        c170_purchases["ALIQ_ICMS"] = c170_purchases[str(layout["ALIQ_ICMS"])]
+        c170_purchases["ALIQ_PIS"] = c170_purchases[str(layout["ALIQ_PIS"])]
+        c170_purchases["ALIQ_COFINS"] = c170_purchases[str(layout["ALIQ_COFINS"])]
+
+        # Tax bases
+        c170_purchases["VL_BC_ICMS"] = c170_purchases[str(layout["VL_BC_ICMS"])]
+        c170_purchases["VL_BC_PIS"] = c170_purchases[str(layout["VL_BC_PIS"])]
+        c170_purchases["VL_BC_COFINS"] = c170_purchases[str(layout["VL_BC_COFINS"])]
+
+        # CST codes
         c170_purchases["CST_ICMS"] = c170_purchases[str(layout["CST_ICMS"])]
         c170_purchases["CST_PIS"] = c170_purchases[str(layout["CST_PIS"])]
         c170_purchases["CST_COFINS"] = c170_purchases[str(layout["CST_COFINS"])]
-        c170_purchases["DESCR_COMPL"] = c170_purchases[str(layout["DESCR_COMPL"])]
 
         # Merge with products to get NCM
         c170_purchases = c170_purchases.merge(products, on="COD_ITEM", how="left")
@@ -194,14 +217,26 @@ class EFDFiscalParser(SPEDParser):
                         item_code=str(row.get("COD_ITEM", "")),
                         description=row.get("DESCR_ITEM") or row.get("DESCR_COMPL"),
                         total_value=self._to_decimal(row.get("VL_ITEM", 0)),
+                        quantity=self._to_decimal(row.get("QTD")) if pd.notna(row.get("QTD")) else None,
+                        unit=str(row.get("UNID", "")) if pd.notna(row.get("UNID")) else None,
                         icms_value=self._to_decimal(row.get("VL_ICMS", 0)),
                         pis_value=self._to_decimal(row.get("VL_PIS", 0)),
                         cofins_value=self._to_decimal(row.get("VL_COFINS", 0)),
+                        ipi_value=self._to_decimal(row.get("VL_IPI")) if pd.notna(row.get("VL_IPI")) else None,
+                        aliq_pis=self._to_decimal(row.get("ALIQ_PIS")) if pd.notna(row.get("ALIQ_PIS")) else None,
+                        aliq_cofins=self._to_decimal(row.get("ALIQ_COFINS")) if pd.notna(row.get("ALIQ_COFINS")) else None,
+                        aliq_icms=self._to_decimal(row.get("ALIQ_ICMS")) if pd.notna(row.get("ALIQ_ICMS")) else None,
+                        vl_bc_pis=self._to_decimal(row.get("VL_BC_PIS")) if pd.notna(row.get("VL_BC_PIS")) else None,
+                        vl_bc_cofins=self._to_decimal(row.get("VL_BC_COFINS")) if pd.notna(row.get("VL_BC_COFINS")) else None,
+                        vl_bc_icms=self._to_decimal(row.get("VL_BC_ICMS")) if pd.notna(row.get("VL_BC_ICMS")) else None,
                         operation="entrada",
                         participant_uf=str(row.get("UF", ""))[:2] if row.get("UF") else None,
                         cst_icms=str(row.get("CST_ICMS", "")),
                         cst_pis=str(row.get("CST_PIS", "")),
                         cst_cofins=str(row.get("CST_COFINS", "")),
+                        document_number=str(row.get("num_doc", "")) if pd.notna(row.get("num_doc")) else None,
+                        document_key=str(row.get("chv_nfe", "")) if pd.notna(row.get("chv_nfe")) else None,
+                        document_date=self._parse_date(str(row.get("dt_doc", ""))) if pd.notna(row.get("dt_doc")) else None,
                     )
                 )
             except Exception as e:

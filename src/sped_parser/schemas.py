@@ -36,21 +36,51 @@ class SPEDItem(BaseModel):
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
+    # Item identification
     ncm: str = Field(..., pattern=r"^\d{8}$", description="NCM code (8 digits)")
     cfop: str = Field(..., pattern=r"^\d{4}$", description="CFOP code (4 digits)")
     item_code: str = Field(..., description="Internal item code")
     description: Optional[str] = Field(None, description="Item description")
+
+    # Values
     total_value: Decimal = Field(..., description="Total item value")
+    quantity: Optional[Decimal] = Field(None, description="Item quantity (QTD)")
+    unit: Optional[str] = Field(None, description="Unit of measure (UNID)")
+
+    # Tax values (current system)
     icms_value: Decimal = Field(Decimal("0"), description="ICMS tax value")
     pis_value: Decimal = Field(Decimal("0"), description="PIS tax value")
     cofins_value: Decimal = Field(Decimal("0"), description="COFINS tax value")
+    ipi_value: Optional[Decimal] = Field(None, description="IPI tax value")
+
+    # Tax rates (critical for LC 214 recalculation)
+    aliq_pis: Optional[Decimal] = Field(None, description="PIS tax rate (%)")
+    aliq_cofins: Optional[Decimal] = Field(None, description="COFINS tax rate (%)")
+    aliq_icms: Optional[Decimal] = Field(None, description="ICMS tax rate (%)")
+
+    # Tax bases (critical for IBS/CBS calculation)
+    vl_bc_pis: Optional[Decimal] = Field(None, description="PIS tax base")
+    vl_bc_cofins: Optional[Decimal] = Field(None, description="COFINS tax base")
+    vl_bc_icms: Optional[Decimal] = Field(None, description="ICMS tax base")
+
+    # CST codes
+    cst_pis: Optional[str] = Field(None, description="CST PIS code")
+    cst_cofins: Optional[str] = Field(None, description="CST COFINS code")
+    cst_icms: Optional[str] = Field(None, description="CST ICMS code")
+
+    # Credit classification (critical for LC 214 credit rules)
+    nat_bc_cred: Optional[str] = Field(None, description="Nature of credit base code")
+
+    # Document reference (for audit trail)
+    document_number: Optional[str] = Field(None, description="Document number (NUM_DOC)")
+    document_key: Optional[str] = Field(None, description="NFe access key (CHV_NFE)")
+    document_date: Optional[date] = Field(None, description="Document date (DT_DOC)")
+
+    # Operation
     operation: Literal["entrada", "saida"] = Field(..., description="Operation type")
     participant_uf: Optional[str] = Field(
         None, pattern=r"^[A-Z]{2}$", description="Participant UF (for purchases)"
     )
-    cst_pis: Optional[str] = Field(None, description="CST PIS code")
-    cst_cofins: Optional[str] = Field(None, description="CST COFINS code")
-    cst_icms: Optional[str] = Field(None, description="CST ICMS code")
 
 
 class SPEDExpense(BaseModel):
