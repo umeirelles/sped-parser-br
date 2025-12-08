@@ -46,3 +46,12 @@ htmlcov/
 # OS
 .DS_Store
 Thumbs.db
+
+# SPED test files (SENSITIVE - never commit real company data!)
+tests/fixtures/*.txt
+arquivos_teste/*.txt
+*.txt
+# But allow markdown files
+!*.md
+!LICENSE
+!CHANGELOG.md
