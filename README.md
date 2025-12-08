@@ -1,6 +1,13 @@
 # sped-parser
 
+[![PyPI version](https://img.shields.io/badge/pypi-v0.1.0-blue.svg)](https://pypi.org/project/sped-parser/)
+[![Python versions](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://pypi.org/project/sped-parser/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests](https://github.com/umeirelles/sped-parser/workflows/Tests/badge.svg)](https://github.com/umeirelles/sped-parser/actions)
+
 Python library for parsing Brazilian SPED files (Sistema Público de Escrituração Digital).
+
+[Installation](#installation) · [Quick Start](#quick-start) · [Documentation](#documentation) · [Contributing](#contributing)
 
 ## Features
 
