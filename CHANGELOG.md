@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Document references now properly linked from parent C100/A100 records
+- **Critical**: SPED file parsing with leading delimiter (files start with `|`)
+- **Critical**: Participant UF extraction using IBGE code mapping (13→AM, 35→SP, etc.)
 
 ## [0.1.0] - 2025-12-08
 

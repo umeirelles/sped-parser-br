@@ -13,7 +13,7 @@ This package contains all constant values used in SPED file parsing:
 from .cst import CST_PIS_COFINS, CST_ICMS
 from .cfop import CFOP_DESCRIPTIONS
 from .uf import UF_CODES
-from .indicators import IND_OPER, COD_SIT, NAT_BC_CRED
+from .indicators import IND_OPER, COD_SIT, NAT_BC_CRED, IBGE_UF_CODES
 from .layouts import (
     ENCODING,
     DELIMITER,
@@ -41,6 +41,7 @@ __all__ = [
     "IND_OPER",
     "COD_SIT",
     "NAT_BC_CRED",
+    "IBGE_UF_CODES",
     # Parsing constants
     "ENCODING",
     "DELIMITER",

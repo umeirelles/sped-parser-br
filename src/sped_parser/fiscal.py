@@ -12,7 +12,7 @@ from decimal import Decimal
 import pandas as pd
 
 from .base import SPEDParser
-from .constants import COLUMN_COUNT_FISCAL, PARENT_CODES_FISCAL, EFDFiscalLayout
+from .constants import COLUMN_COUNT_FISCAL, PARENT_CODES_FISCAL, EFDFiscalLayout, IBGE_UF_CODES
 from .schemas import SPEDData, SPEDHeader, SPEDItem
 
 logger = logging.getLogger(__name__)
@@ -125,8 +125,10 @@ class EFDFiscalParser(SPEDParser):
             }
         )
 
-        # Extract UF from COD_MUN (first 2 digits)
-        rec_0150["UF"] = rec_0150["COD_MUN"].astype(str).str[:2]
+        # Extract UF from COD_MUN using IBGE mapping
+        # COD_MUN first 2 digits are IBGE state codes (11=RO, 13=AM, 35=SP, etc.)
+        rec_0150["ibge_code"] = rec_0150["COD_MUN"].astype(str).str[:2]
+        rec_0150["UF"] = rec_0150["ibge_code"].map(IBGE_UF_CODES)
 
         return rec_0150[["COD_PART", "NOME", "UF"]].drop_duplicates(subset="COD_PART")
 

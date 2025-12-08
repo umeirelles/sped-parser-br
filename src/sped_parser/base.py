@@ -150,13 +150,17 @@ class SPEDParser(ABC):
 
         First tries fast C engine, falls back to Python engine with chunking if needed.
 
+        IMPORTANT: SPED files start with delimiter |, creating an empty first column.
+        We read with num_columns+1 and drop the first empty column.
+
         Args:
             content: File bytes
 
         Returns:
             DataFrame with string columns numbered 0, 1, 2, ...
         """
-        column_names = [str(i) for i in range(self.num_columns)]
+        # Read with num_columns + 1 to account for leading delimiter
+        column_names = [str(i) for i in range(self.num_columns + 1)]
         file_obj = BytesIO(content)
 
         # Try fast C engine first
@@ -174,6 +178,10 @@ class SPEDParser(ABC):
                 on_bad_lines="skip",
             )
             logger.debug(f"Successfully read {len(df)} rows with C engine")
+
+            # Drop first empty column and rename to 0-indexed
+            df = df.drop(columns=['0'])
+            df.columns = [str(i) for i in range(len(df.columns))]
             return df
 
         except (pd.errors.ParserError, csv.Error) as e:
@@ -196,9 +204,9 @@ class SPEDParser(ABC):
 
         parts = []
         for chunk in reader:
-            # Check for end marker in this chunk
-            if "0" in chunk.columns:
-                mask_end = chunk["0"].astype(str).eq(self.end_marker)
+            # Check for end marker in this chunk (register code is now in column '1')
+            if "1" in chunk.columns:
+                mask_end = chunk["1"].astype(str).eq(self.end_marker)
                 if mask_end.any():
                     first_idx = int(np.argmax(mask_end.to_numpy()))
                     parts.append(chunk.iloc[: first_idx + 1])
@@ -207,6 +215,12 @@ class SPEDParser(ABC):
 
         df = pd.concat(parts, ignore_index=True) if parts else pd.DataFrame(columns=column_names)
         logger.debug(f"Read {len(df)} rows with Python engine (chunked)")
+
+        # Drop first empty column and rename to 0-indexed
+        if '0' in df.columns:
+            df = df.drop(columns=['0'])
+            df.columns = [str(i) for i in range(len(df.columns))]
+
         return df
 
     def _trim_at_end_marker(self, df: pd.DataFrame) -> pd.DataFrame:
