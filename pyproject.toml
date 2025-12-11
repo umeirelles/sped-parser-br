@@ -3,14 +3,14 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "sped-parser"
+name = "sped-parser-br"
 version = "0.1.0"
 description = "Python library for parsing Brazilian SPED files (EFD Contribuições, EFD Fiscal, ECD)"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.9"
 authors = [
-    {name = "Fiscalia Team", email = "dev@fiscalia.com"}
+    {name = "Fiscalia Team", email = "ubaldino@fiscalia.app"}
 ]
 keywords = ["sped", "efd", "ecd", "brazil", "tax", "fiscal", "contribuicoes", "parser"]
 classifiers = [
