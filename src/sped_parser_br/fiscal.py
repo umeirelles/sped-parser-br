@@ -69,7 +69,7 @@ class EFDFiscalParser(SPEDParser):
 
     def _extract_header(self, df: pd.DataFrame) -> SPEDHeader:
         """Extract header from 0000 record."""
-        rec_0000 = df[df["0"] == "0000"]
+        rec_0000 = df[df["1"] == "0000"]
         if rec_0000.empty:
             raise ValueError("No 0000 record found in file")
 
@@ -94,7 +94,7 @@ class EFDFiscalParser(SPEDParser):
 
     def _build_product_lookup(self, df: pd.DataFrame) -> pd.DataFrame:
         """Build product lookup from 0200 records."""
-        rec_0200 = df[df["0"] == "0200"].copy()
+        rec_0200 = df[df["1"] == "0200"].copy()
         if rec_0200.empty:
             return pd.DataFrame(columns=["COD_ITEM", "DESCR_ITEM", "COD_NCM"])
 
@@ -112,7 +112,7 @@ class EFDFiscalParser(SPEDParser):
 
     def _build_participant_lookup(self, df: pd.DataFrame) -> pd.DataFrame:
         """Build participant lookup from 0150 records (for supplier UF)."""
-        rec_0150 = df[df["0"] == "0150"].copy()
+        rec_0150 = df[df["1"] == "0150"].copy()
         if rec_0150.empty:
             return pd.DataFrame(columns=["COD_PART", "NOME", "COD_MUN"])
 
@@ -137,7 +137,7 @@ class EFDFiscalParser(SPEDParser):
     ) -> list[SPEDItem]:
         """Extract C170 purchase items (entradas only)."""
         # Get C100 invoice headers for ind_oper, cod_part, and document info
-        c100 = df[df["0"] == "C100"].copy()
+        c100 = df[df["1"] == "C100"].copy()
         if c100.empty:
             return []
 
@@ -150,7 +150,7 @@ class EFDFiscalParser(SPEDParser):
         c100_data = c100.set_index("id")[["IND_OPER", "COD_PART", "NUM_DOC", "CHV_NFE", "DT_DOC"]]
 
         # Get C170 items
-        c170 = df[df["0"] == "C170"].copy()
+        c170 = df[df["1"] == "C170"].copy()
         if c170.empty:
             return []
 

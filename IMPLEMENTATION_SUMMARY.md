@@ -59,7 +59,7 @@ sped-parser/
 ### Level 1: High-Level (Typed Business Data)
 
 ```python
-from sped_parser import EFDContribuicoesParser
+from sped_parser_br import EFDContribuicoesParser
 
 parser = EFDContribuicoesParser()
 data = parser.parse_file("efd_contrib.txt")
@@ -155,7 +155,7 @@ sped-parser>=0.1.0
 
 ```python
 # In src/fiscalia/api.py
-from sped_parser import EFDContribuicoesParser, EFDFiscalParser, ECDParser
+from sped_parser_br import EFDContribuicoesParser, EFDFiscalParser, ECDParser
 
 @app.post("/api/sped/upload")
 async def upload_sped(file: UploadFile, file_type: str):
@@ -307,7 +307,7 @@ async def analyze_reform(session_id: str, target_year: int):
 ### Basic Parsing
 
 ```python
-from sped_parser import EFDContribuicoesParser
+from sped_parser_br import EFDContribuicoesParser
 
 parser = EFDContribuicoesParser()
 data = parser.parse_file("efd_contrib.txt")
@@ -319,7 +319,7 @@ print(f"Sales: {len(data.sales_items)} items")
 ### Tax Reform Simulation
 
 ```python
-from sped_parser import EFDContribuicoesParser, EFDFiscalParser, ECDParser
+from sped_parser_br import EFDContribuicoesParser, EFDFiscalParser, ECDParser
 
 # Parse all 3 file types
 sales_data = EFDContribuicoesParser().parse_file("contrib.txt")

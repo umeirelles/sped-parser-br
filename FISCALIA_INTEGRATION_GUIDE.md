@@ -30,7 +30,7 @@ pip install -e .
 
 ```python
 # In your FISCALIA code (e.g., app/services/sped_service.py)
-from sped_parser import (
+from sped_parser_br import (
     EFDContribuicoesParser,
     EFDFiscalParser,
     ECDParser,
@@ -172,7 +172,7 @@ def simulate_tax_reform(sales_items, purchase_items):
 # In app/routes/sped_routes.py or similar
 
 from flask import request, jsonify
-from sped_parser import EFDContribuicoesParser, EFDFiscalParser
+from sped_parser_br import EFDContribuicoesParser, EFDFiscalParser
 
 @app.route('/api/upload-sped', methods=['POST'])
 def upload_sped():
@@ -359,7 +359,7 @@ def save_to_database(sales_items):
 ## Error Handling
 
 ```python
-from sped_parser import (
+from sped_parser_br import (
     SPEDParseError,
     SPEDEncodingError,
     SPEDFileNotFoundError,
@@ -395,7 +395,7 @@ def safe_parse_sped(file_content):
 
 def test_sped_parser_integration():
     """Test that sped-parser works in FISCALIA."""
-    from sped_parser import EFDContribuicoesParser
+    from sped_parser_br import EFDContribuicoesParser
 
     parser = EFDContribuicoesParser()
 

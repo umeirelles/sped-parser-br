@@ -77,7 +77,7 @@ class EFDContribuicoesParser(SPEDParser):
 
     def _extract_header(self, df: pd.DataFrame) -> SPEDHeader:
         """Extract header from 0000 record."""
-        rec_0000 = df[df["0"] == "0000"]
+        rec_0000 = df[df["1"] == "0000"]
         if rec_0000.empty:
             raise ValueError("No 0000 record found in file")
 
@@ -102,7 +102,7 @@ class EFDContribuicoesParser(SPEDParser):
 
     def _build_product_lookup(self, df: pd.DataFrame) -> pd.DataFrame:
         """Build product lookup from 0200 records."""
-        rec_0200 = df[df["0"] == "0200"].copy()
+        rec_0200 = df[df["1"] == "0200"].copy()
         if rec_0200.empty:
             return pd.DataFrame(columns=["COD_ITEM", "DESCR_ITEM", "COD_NCM"])
 
@@ -123,7 +123,7 @@ class EFDContribuicoesParser(SPEDParser):
     ) -> list[SPEDItem]:
         """Extract C170 sales items (saídas only)."""
         # Get C100 invoice headers for ind_oper and document info
-        c100 = df[df["0"] == "C100"].copy()
+        c100 = df[df["1"] == "C100"].copy()
         if c100.empty:
             return []
 
@@ -135,7 +135,7 @@ class EFDContribuicoesParser(SPEDParser):
         c100_data = c100.set_index("id")[["IND_OPER", "NUM_DOC", "CHV_NFE", "DT_DOC"]]
 
         # Get C170 items
-        c170 = df[df["0"] == "C170"].copy()
+        c170 = df[df["1"] == "C170"].copy()
         if c170.empty:
             return []
 
@@ -228,7 +228,7 @@ class EFDContribuicoesParser(SPEDParser):
     ) -> list[SPEDItem]:
         """Extract A170 service sales (saídas only)."""
         # Get A100 service headers for ind_oper and document info
-        a100 = df[df["0"] == "A100"].copy()
+        a100 = df[df["1"] == "A100"].copy()
         if a100.empty:
             return []
 
@@ -240,7 +240,7 @@ class EFDContribuicoesParser(SPEDParser):
         a100_data = a100.set_index("id")[["IND_OPER", "NUM_DOC", "CHV_NFSE", "DT_DOC"]]
 
         # Get A170 items
-        a170 = df[df["0"] == "A170"].copy()
+        a170 = df[df["1"] == "A170"].copy()
         if a170.empty:
             return []
 

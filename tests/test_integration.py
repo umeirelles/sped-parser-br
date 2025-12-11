@@ -15,8 +15,8 @@ from pathlib import Path
 from decimal import Decimal
 from datetime import date
 
-from sped_parser import EFDContribuicoesParser, EFDFiscalParser, ECDParser
-from sped_parser.schemas import SPEDData, SPEDItem, SPEDExpense
+from sped_parser_br import EFDContribuicoesParser, EFDFiscalParser, ECDParser
+from sped_parser_br.schemas import SPEDData, SPEDItem, SPEDExpense
 
 
 # Test file paths

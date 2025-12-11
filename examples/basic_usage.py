@@ -1,5 +1,5 @@
 """
-Example usage of sped-parser library.
+Example usage of sped-parser-br library.
 
 This script demonstrates how to use the three parsers and access data
 through the layered API.
@@ -11,7 +11,7 @@ from pathlib import Path
 # Add parent/src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
-from sped_parser import EFDContribuicoesParser, EFDFiscalParser, ECDParser
+from sped_parser_br import EFDContribuicoesParser, EFDFiscalParser, ECDParser
 
 
 def example_contribuicoes():

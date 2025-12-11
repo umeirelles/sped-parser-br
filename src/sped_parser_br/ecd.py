@@ -66,7 +66,7 @@ class ECDParser(SPEDParser):
 
     def _extract_header(self, df: pd.DataFrame) -> SPEDHeader:
         """Extract header from 0000 record."""
-        rec_0000 = df[df["0"] == "0000"]
+        rec_0000 = df[df["1"] == "0000"]
         if rec_0000.empty:
             raise ValueError("No 0000 record found in file")
 
@@ -97,7 +97,7 @@ class ECDParser(SPEDParser):
         I051 maps account codes to reference plan codes.
         """
         # Get I050 chart of accounts
-        rec_i050 = df[df["0"] == "I050"].copy()
+        rec_i050 = df[df["1"] == "I050"].copy()
         if rec_i050.empty:
             return pd.DataFrame(columns=["COD_CTA", "NOME_CTA", "COD_CTA_REF"])
 
@@ -110,7 +110,7 @@ class ECDParser(SPEDParser):
         )
 
         # Get I051 reference mappings
-        rec_i051 = df[df["0"] == "I051"].copy()
+        rec_i051 = df[df["1"] == "I051"].copy()
         if not rec_i051.empty:
             layout_i051 = ECDLayout.RECORD_I051
             rec_i051 = rec_i051.rename(
@@ -141,7 +141,7 @@ class ECDParser(SPEDParser):
         I355 contains profit & loss account balances, which are used for
         calculating expense credits under tax reform.
         """
-        rec_i355 = df[df["0"] == "I355"].copy()
+        rec_i355 = df[df["1"] == "I355"].copy()
         if rec_i355.empty:
             return []
 

@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a bug in sped-parser
+about: Report a bug in sped-parser-br
 title: '[BUG] '
 labels: bug
 assignees: ''
@@ -15,7 +15,7 @@ A clear and concise description of what the bug is.
 Steps to reproduce the behavior:
 
 ```python
-from sped_parser import EFDContribuicoesParser
+from sped_parser_br import EFDContribuicoesParser
 
 parser = EFDContribuicoesParser()
 data = parser.parse_file("myfile.txt")
@@ -38,7 +38,7 @@ Paste the full error traceback here
 
 ## Environment
 
-- **sped-parser version**: (run `pip show sped-parser`)
+- **sped-parser-br version**: (run `pip show sped-parser-br`)
 - **Python version**: (run `python --version`)
 - **OS**: (e.g., macOS 14.1, Ubuntu 22.04, Windows 11)
 - **pandas version**: (run `pip show pandas`)

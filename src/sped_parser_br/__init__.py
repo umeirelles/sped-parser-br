@@ -7,7 +7,7 @@ This library provides parsers for:
 - ECD (Escrituração Contábil Digital) - for expense data
 
 Example usage:
-    >>> from sped_parser import EFDContribuicoesParser
+    >>> from sped_parser_br import EFDContribuicoesParser
     >>> parser = EFDContribuicoesParser()
     >>> data = parser.parse_file("efd_contribuicoes_2024.txt")
     >>> print(f"Company: {data.header.company_name}")
@@ -33,7 +33,7 @@ from .exceptions import (
     SPEDEmptyFileError,
 )
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 __all__ = [
     # Parsers

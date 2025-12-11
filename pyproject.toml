@@ -40,13 +40,13 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/fiscalia/sped-parser"
-Documentation = "https://github.com/fiscalia/sped-parser#readme"
-Repository = "https://github.com/fiscalia/sped-parser"
-Issues = "https://github.com/fiscalia/sped-parser/issues"
+Homepage = "https://github.com/umeirelles/sped-parser-br"
+Documentation = "https://github.com/umeirelles/sped-parser-br#readme"
+Repository = "https://github.com/umeirelles/sped-parser-br"
+Issues = "https://github.com/umeirelles/sped-parser-br/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/sped_parser"]
+packages = ["src/sped_parser_br"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

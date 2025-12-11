@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for sped-parser
+about: Suggest an idea for sped-parser-br
 title: '[FEATURE] '
 labels: enhancement
 assignees: ''
@@ -23,7 +23,7 @@ Describe how you envision this feature working.
 
 ```python
 # Example usage of the proposed feature
-from sped_parser import EFDContribuicoesParser
+from sped_parser_br import EFDContribuicoesParser
 
 parser = EFDContribuicoesParser()
 # ... show how the new feature would be used

@@ -130,7 +130,7 @@ class SPEDData(BaseModel):
         Example:
             >>> data = parser.parse_file("file.txt")
             >>> df = data.raw_dataframe
-            >>> c197 = df[df['0'] == 'C197']
+            >>> c197 = df[df['1'] == 'C197']
         """
         if self._raw_df is None:
             raise ValueError("Raw DataFrame not available (file not parsed yet)")
@@ -156,7 +156,7 @@ class SPEDData(BaseModel):
         if self._raw_df is None:
             raise ValueError("Raw DataFrame not available (file not parsed yet)")
 
-        rows = self._raw_df[self._raw_df["0"] == code]
+        rows = self._raw_df[self._raw_df["1"] == code]
         return rows.to_dict("records")
 
     def set_raw_dataframe(self, df: pd.DataFrame) -> None:

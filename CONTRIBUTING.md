@@ -214,7 +214,7 @@ Place tests in `tests/` directory:
 ```python
 # tests/test_contribuicoes.py
 import pytest
-from sped_parser import EFDContribuicoesParser
+from sped_parser_br import EFDContribuicoesParser
 
 def test_parse_valid_file():
     parser = EFDContribuicoesParser()

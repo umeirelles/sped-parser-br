@@ -1,9 +1,9 @@
-# sped-parser
+# sped-parser-br
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.1.0-blue.svg)](https://pypi.org/project/sped-parser/)
-[![Python versions](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://pypi.org/project/sped-parser/)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.1.0-blue.svg)](https://pypi.org/project/sped-parser-br/)
+[![Python versions](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://pypi.org/project/sped-parser-br/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://github.com/umeirelles/sped-parser/workflows/Tests/badge.svg)](https://github.com/umeirelles/sped-parser/actions)
+[![Tests](https://github.com/umeirelles/sped-parser-br/workflows/Tests/badge.svg)](https://github.com/umeirelles/sped-parser-br/actions)
 
 Python library for parsing Brazilian SPED files (Sistema Público de Escrituração Digital).
 
@@ -24,13 +24,13 @@ Python library for parsing Brazilian SPED files (Sistema Público de Escrituraç
 ## Installation
 
 ```bash
-pip install sped-parser
+pip install sped-parser-br
 ```
 
 ## Quick Start
 
 ```python
-from sped_parser import EFDContribuicoesParser, EFDFiscalParser, ECDParser
+from sped_parser_br import EFDContribuicoesParser, EFDFiscalParser, ECDParser
 
 # Parse EFD Contribuições (for sales data)
 parser = EFDContribuicoesParser()
@@ -109,7 +109,7 @@ grouped = df.groupby('0').size()
 ### Tax Reform Impact Simulation
 
 ```python
-from sped_parser import EFDContribuicoesParser, EFDFiscalParser, ECDParser
+from sped_parser_br import EFDContribuicoesParser, EFDFiscalParser, ECDParser
 
 # Load all three file types
 contrib_parser = EFDContribuicoesParser()
@@ -182,8 +182,8 @@ high_value_items = df[(df['0'] == 'C170') & (df['7'].astype(float) > 10000)]
 
 ```bash
 # Clone the repository
-git clone https://github.com/fiscalia/sped-parser.git
-cd sped-parser
+git clone https://github.com/umeirelles/sped-parser-br.git
+cd sped-parser-br
 
 # Install development dependencies
 pip install -e ".[dev]"

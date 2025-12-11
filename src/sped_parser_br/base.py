@@ -157,7 +157,7 @@ class SPEDParser(ABC):
             content: File bytes
 
         Returns:
-            DataFrame with string columns numbered 0, 1, 2, ...
+            DataFrame with string columns numbered 1, 2, 3, ... (1-indexed, matches SPED spec)
         """
         # Read with num_columns + 1 to account for leading delimiter
         column_names = [str(i) for i in range(self.num_columns + 1)]
@@ -179,9 +179,9 @@ class SPEDParser(ABC):
             )
             logger.debug(f"Successfully read {len(df)} rows with C engine")
 
-            # Drop first empty column and rename to 0-indexed
+            # Drop first empty column and rename to 1-indexed (matches SPED spec)
             df = df.drop(columns=['0'])
-            df.columns = [str(i) for i in range(len(df.columns))]
+            df.columns = [str(i+1) for i in range(len(df.columns))]
             return df
 
         except (pd.errors.ParserError, csv.Error) as e:
@@ -204,7 +204,7 @@ class SPEDParser(ABC):
 
         parts = []
         for chunk in reader:
-            # Check for end marker in this chunk (register code is now in column '1')
+            # Check for end marker in this chunk (register code is in column '1' before rename)
             if "1" in chunk.columns:
                 mask_end = chunk["1"].astype(str).eq(self.end_marker)
                 if mask_end.any():
@@ -216,10 +216,10 @@ class SPEDParser(ABC):
         df = pd.concat(parts, ignore_index=True) if parts else pd.DataFrame(columns=column_names)
         logger.debug(f"Read {len(df)} rows with Python engine (chunked)")
 
-        # Drop first empty column and rename to 0-indexed
+        # Drop first empty column and rename to 1-indexed (matches SPED spec)
         if '0' in df.columns:
             df = df.drop(columns=['0'])
-            df.columns = [str(i) for i in range(len(df.columns))]
+            df.columns = [str(i+1) for i in range(len(df.columns))]
 
         return df
 
@@ -233,10 +233,10 @@ class SPEDParser(ABC):
         Returns:
             DataFrame trimmed at end marker (inclusive)
         """
-        if df.empty or "0" not in df.columns:
+        if df.empty or "1" not in df.columns:
             return df
 
-        mask = df["0"].astype(str).eq(self.end_marker)
+        mask = df["1"].astype(str).eq(self.end_marker)
         if mask.any():
             cut_idx = int(np.argmax(mask.to_numpy()))
             df = df.iloc[: cut_idx + 1].copy()
@@ -263,9 +263,9 @@ class SPEDParser(ABC):
         df.insert(0, "id_pai", None)
         df.insert(0, "id", df.index.astype(str))
 
-        # Mark parent records
-        if "0" in df.columns:
-            is_parent = df["0"].isin(self.parent_codes)
+        # Mark parent records (register codes now in column '1' with 1-indexing)
+        if "1" in df.columns:
+            is_parent = df["1"].isin(self.parent_codes)
             df.loc[is_parent, "id_pai"] = df.loc[is_parent, "id"]
 
         # Forward-fill parent IDs

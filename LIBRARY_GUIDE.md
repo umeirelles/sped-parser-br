@@ -38,7 +38,7 @@ A **library** doesn't do anything by itself. It provides **reusable tools** that
 
 ```python
 # This is a LIBRARY (provides tools)
-import sped_parser
+import sped_parser_br
 
 # This is an APPLICATION (uses the tools)
 parser = sped_parser.EFDContribuicoesParser()
@@ -87,7 +87,7 @@ sped-parser/
 
 **How it works**:
 1. User types: `pip install sped-parser`
-2. Now any Python program can do: `import sped_parser`
+2. Now any Python program can do: `import sped_parser_br`
 3. The program uses your tools
 
 **Purpose**: Provide reusable tools for OTHER programs
@@ -163,7 +163,7 @@ site-packages/
 
 ### Python's Search Path
 
-When you do `import sped_parser`, Python looks in these places **in order**:
+When you do `import sped_parser_br`, Python looks in these places **in order**:
 
 ```python
 import sys
@@ -188,7 +188,7 @@ Your library isn't installed yet. Two options:
 ```python
 import sys
 sys.path.insert(0, '/path/to/sped-parser/src')
-import sped_parser  # Now Python can find it
+import sped_parser_br  # Now Python can find it
 ```
 
 **Option 2: Editable install** (BEST for development)
@@ -250,9 +250,9 @@ import my_code  # ✅ WORKS!
 
 **User experience**:
 ```python
-import sped_parser
+import sped_parser_br
 # Nothing useful here, must do:
-from sped_parser.contribuicoes import EFDContribuicoesParser
+from sped_parser_br.contribuicoes import EFDContribuicoesParser
 ```
 
 **Better** (with exports):
@@ -267,7 +267,7 @@ __all__ = ['EFDContribuicoesParser', 'EFDFiscalParser', 'ECDParser']
 
 **User experience**:
 ```python
-from sped_parser import EFDContribuicoesParser  # ✅ Clean!
+from sped_parser_br import EFDContribuicoesParser  # ✅ Clean!
 ```
 
 ### Relative vs Absolute Imports
@@ -282,7 +282,7 @@ from .schemas import SPEDData
 from .constants import PARENT_CODES_CONTRIBUICOES
 
 # ❌ BAD (absolute import)
-from sped_parser.base import SPEDParser  # Breaks if package renamed
+from sped_parser_br.base import SPEDParser  # Breaks if package renamed
 ```
 
 **Why?**
@@ -294,7 +294,7 @@ from sped_parser.base import SPEDParser  # Breaks if package renamed
 
 ```python
 # User's script.py
-from sped_parser import EFDContribuicoesParser  # ✅ Absolute
+from sped_parser_br import EFDContribuicoesParser  # ✅ Absolute
 ```
 
 ---
@@ -351,7 +351,7 @@ sped_parser/
 
 ```python
 # From outside
-from sped_parser.constants import CST_PIS_COFINS
+from sped_parser_br.constants import CST_PIS_COFINS
 
 # From inside sped_parser/base.py
 from .constants import ENCODING, DELIMITER
@@ -454,7 +454,7 @@ class SPEDFileNotFoundError(SPEDError):
 
 **User's code**:
 ```python
-from sped_parser import EFDContribuicoesParser, SPEDParseError
+from sped_parser_br import EFDContribuicoesParser, SPEDParseError
 
 try:
     data = parser.parse_file("file.txt")
@@ -700,7 +700,7 @@ User's Terminal
 
 ```python
 # User's script.py
-from sped_parser import EFDContribuicoesParser
+from sped_parser_br import EFDContribuicoesParser
 ```
 
 **What happens internally**:
@@ -905,7 +905,7 @@ User's Computer
 │   └── Downloads from PyPI
 │   └── Installs to site-packages/
 │
-├── from sped_parser import EFDContribuicoesParser
+├── from sped_parser_br import EFDContribuicoesParser
 │
 └── parser.parse_file("myfile.txt")
 ```
@@ -913,7 +913,7 @@ User's Computer
 ### 4. The Magic Behind `import`
 
 ```
-import sped_parser
+import sped_parser_br
 │
 ├─ Python checks sys.path for 'sped_parser'
 │  └─ Found in site-packages/sped_parser/

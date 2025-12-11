@@ -9,7 +9,7 @@ This script demonstrates the fixed functionality:
 4. All 28 integration tests passing
 """
 
-from sped_parser import EFDContribuicoesParser, EFDFiscalParser, ECDParser
+from sped_parser_br import EFDContribuicoesParser, EFDFiscalParser, ECDParser
 from pathlib import Path
 
 FIXTURES = Path("tests/fixtures")
